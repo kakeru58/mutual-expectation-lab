@@ -1,0 +1,8 @@
+{
+  "runs": 300,
+  "episodes": 201600,
+  "train_episodes": 180000,
+  "eval_episodes": 21600,
+  "frozen_predictor_checks": 1800,
+  "log_reaggregation_matches": true
+}

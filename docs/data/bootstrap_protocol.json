@@ -1,0 +1,10 @@
+{
+  "replicates": 10000,
+  "seed": 20261028,
+  "unit": "simulation_seed",
+  "shared_resampling_indices": true,
+  "equal_pair_weight": true,
+  "interval_type": "pointwise_percentile_95",
+  "multiple_comparison_adjustment": false,
+  "population_interpretation": "simulation_seed_variation_only"
+}

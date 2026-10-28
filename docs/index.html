@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Experiment | Mutual Expectation Lab</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="index.html">Mutual Expectation Lab</a>
+      <nav>
+        <a class="active" href="index.html">Experiment</a><a href="results.html">Results</a
+        ><a href="model.html">Model</a>
+        <button
+          id="languageToggle"
+          class="language-toggle"
+          type="button"
+          aria-label="Switch to Japanese"
+        >
+          日本語
+        </button>
+      </nav>
+    </header>
+    <main>
+      <h1>Experiment</h1>
+      <section class="setup" aria-label="Experiment settings">
+        <label
+          >Agent pair<select id="pair">
+            <option value="1">1: Selective demands</option>
+            <option value="2">2: Different demand criteria</option>
+            <option value="3" selected>3: Symmetric demands</option>
+            <option value="4">4: Different yielding costs</option>
+            <option value="5">5: Stronger demands from A</option>
+          </select></label
+        >
+        <label
+          >Condition<select id="condition">
+            <option value="P_P">Prediction only</option>
+            <option value="E_P">Expectation: A only</option>
+            <option value="E_E" selected>Expectation: A and B</option>
+          </select></label
+        >
+        <label class="seed"
+          >Seed<input id="seed" type="number" min="0" max="999999" value="0"
+        /></label>
+      </section>
+      <p class="hint settings-note">Changing the pair, condition or seed resets training.</p>
+      <section class="training-panel" aria-labelledby="trainingHeading">
+        <div class="heading">
+          <h2 id="trainingHeading">Training</h2>
+          <button id="reset">Reset to epoch 0</button>
+        </div>
+        <div class="training-status">
+          <div><span class="stat-label">Completed epochs</span><strong id="blocks">0</strong></div>
+          <div>
+            <span class="stat-label">Training episodes</span><strong id="experience">0</strong>
+          </div>
+          <div class="epoch-progress">
+            <label for="epochProgress" id="epochProgressLabel"
+              >Current epoch: 0 of 12 episodes</label
+            ><progress id="epochProgress" max="12" value="0"></progress>
+          </div>
+        </div>
+        <p class="hint">
+          One epoch contains 12 scenarios. Both agents update their predictions of the other agent.
+        </p>
+        <div class="training-controls">
+          <button id="run" disabled>Train 1 episode</button>
+          <span class="control-separator">or</span>
+          <label
+            >Train until epoch<select id="target">
+              <option value="2">2</option>
+              <option value="5">5</option>
+              <option value="10">10</option>
+              <option value="20">20</option>
+              <option value="50">50</option>
+            </select></label
+          >
+          <button id="train" disabled>Train 24 episodes</button>
+        </div>
+        <p id="trainPlan" class="hint">24 episodes remaining to reach epoch 2.</p>
+      </section>
+      <p id="message" class="message" role="status">Loading.</p>
+      <section class="evaluation-controls" aria-label="Evaluation">
+        <div>
+          <h2>Evaluation</h2>
+          <p class="hint">Run a scenario without learning or exploration.</p>
+        </div>
+        <label>Scenario<select id="scene"></select></label>
+        <button id="evaluate" class="primary" disabled>Run evaluation</button>
+      </section>
+      <div class="watch">
+        <section class="panel stage">
+          <div class="heading">
+            <h2 id="sceneTitle">No episode selected</h2>
+            <span id="turn">Not started</span>
+          </div>
+          <div id="people" class="people">
+            <p><b>A</b></p>
+            <p><b>B</b></p>
+          </div>
+          <svg
+            viewBox="0 0 760 260"
+            role="img"
+            aria-label="Positions of agents A and B in the corridor"
+          >
+            <path d="M30 95H730V170H30Z" fill="#edf2f3" stroke="#ccd8dc" />
+            <rect x="260" y="170" width="85" height="60" rx="6" fill="#e3f0e9" />
+            <rect x="415" y="35" width="85" height="60" rx="6" fill="#e8eef9" />
+            <text x="380" y="112" text-anchor="middle">Single-width corridor</text>
+            <text x="302" y="248" text-anchor="middle">A's bay</text>
+            <text x="457" y="25" text-anchor="middle">B's bay</text>
+            <g id="avatarA" transform="translate(220,138)">
+              <circle r="22" fill="#14755f" />
+              <text y="6" text-anchor="middle" class="avatar">A</text>
+            </g>
+            <g id="avatarB" transform="translate(540,138)">
+              <circle r="22" fill="#496eab" />
+              <text y="6" text-anchor="middle" class="avatar">B</text>
+            </g>
+          </svg>
+          <div class="controls">
+            <button id="next" disabled>Next step</button
+            ><button id="end" disabled>Show result</button>
+          </div>
+        </section>
+        <section class="panel">
+          <div class="heading">
+            <h2>Communication and actions</h2>
+            <span id="speechCount">0 messages</span>
+          </div>
+          <p class="hint">
+            Requests and cancellations appear as messages. Movement and waiting appear as actions.
+          </p>
+          <div id="conversation" aria-live="polite"><p class="empty">No episode selected.</p></div>
+        </section>
+      </div>
+      <details class="panel details">
+        <summary>Decision details</summary>
+        <div id="thoughts" class="thoughts"></div>
+        <p id="decision"></p>
+        <div class="table-scroll">
+          <table>
+            <thead>
+              <tr>
+                <th>Action</th>
+                <th>Task cost</th>
+                <th>Expectation cost</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="candidates"></tbody>
+          </table>
+        </div>
+        <p id="forecast" class="hint"></p>
+        <p id="parameters" class="hint"></p>
+        <p id="memory" class="hint">Observed partner actions: A 0, B 0.</p>
+      </details>
+    </main>
+    <script type="module" src="js/app.js"></script>
+  </body>
+</html>

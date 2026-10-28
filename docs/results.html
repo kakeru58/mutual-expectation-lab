@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Results | Mutual Expectation Lab</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="index.html">Mutual Expectation Lab</a>
+      <nav>
+        <a href="index.html">Experiment</a><a class="active" href="results.html">Results</a
+        ><a href="model.html">Model</a>
+        <button
+          id="languageToggle"
+          class="language-toggle"
+          type="button"
+          aria-label="Switch to Japanese"
+        >
+          日本語
+        </button>
+      </nav>
+    </header>
+    <main>
+      <h1>Reference results</h1>
+      <p>
+        Five agent pairs, three conditions and 20 seeds. Each run uses the same partner throughout
+        training, with frozen evaluations at epochs 0, 2, 5, 10, 20 and 50.
+      </p>
+      <section class="panel">
+        <h2>Dataset</h2>
+        <p>
+          180,000 training episodes and 21,600 evaluation episodes. Both agents arrived in every
+          evaluation episode.
+        </p>
+        <p>
+          These are archived results. They do not change the training state of the
+          <a href="index.html">live experiment</a>.
+        </p>
+      </section>
+      <section class="panel">
+        <h2>Communication with expectation enabled for both agents</h2>
+        <p class="hint">
+          Total REQUEST and CANCEL actions per 12 evaluation episodes, averaged over 20 seeds.
+        </p>
+        <div class="data-table">
+          <table>
+            <tr>
+              <th>Pair</th>
+              <th>Epoch 0</th>
+              <th>Epoch 2</th>
+              <th>Epoch 5</th>
+              <th>Epoch 10</th>
+              <th>Epoch 20</th>
+              <th>Epoch 50</th>
+            </tr>
+            <tr>
+              <td>1</td>
+              <td>0.00</td>
+              <td>0.30</td>
+              <td>0.50</td>
+              <td>0.55</td>
+              <td>0.55</td>
+              <td>1.20</td>
+            </tr>
+            <tr>
+              <td>2</td>
+              <td>0.00</td>
+              <td>1.10</td>
+              <td>1.20</td>
+              <td>1.00</td>
+              <td>1.05</td>
+              <td>1.20</td>
+            </tr>
+            <tr>
+              <td>3</td>
+              <td>0.00</td>
+              <td>2.25</td>
+              <td>2.45</td>
+              <td>2.40</td>
+              <td>0.95</td>
+              <td>0.25</td>
+            </tr>
+            <tr>
+              <td>4</td>
+              <td>0.00</td>
+              <td>5.00</td>
+              <td>3.60</td>
+              <td>3.80</td>
+              <td>1.70</td>
+              <td>1.30</td>
+            </tr>
+            <tr>
+              <td>5</td>
+              <td>0.00</td>
+              <td>0.95</td>
+              <td>0.85</td>
+              <td>0.75</td>
+              <td>0.75</td>
+              <td>0.75</td>
+            </tr>
+          </table>
+        </div>
+        <p>
+          For pair 3, communication was present at an earlier checkpoint but absent at epoch 50 in
+          16 of 20 seeds. Pair 1 showed more communication later in training. Less communication
+          alone does not establish improvement or overfitting.
+        </p>
+      </section>
+      <section class="panel">
+        <h2>Learning curves</h2>
+        <p class="hint">
+          Gray: prediction only. Blue: expectation for A only. Green: expectation for both. Shading
+          shows pointwise 95% seed bootstrap intervals. Checkpoints are equally spaced on the
+          horizontal axis.
+        </p>
+        <a href="assets/learning_curves.png"
+          ><img
+            class="chart"
+            src="assets/learning_curves.png"
+            alt="Communication counts, joint task costs and prediction loss for five agent pairs"
+        /></a>
+      </section>
+      <section class="panel">
+        <h2>Download data</h2>
+        <ul>
+          <li>
+            <a href="data/curves.csv"
+              >Evaluation summaries by pair, seed, condition and checkpoint</a
+            >
+          </li>
+          <li>
+            <a href="data/paired_contrasts.csv">Paired condition differences and 95% intervals</a>
+          </li>
+          <li><a href="data/communication_patterns.csv">Communication patterns across seeds</a></li>
+          <li><a href="data/verification.json">Run counts and log verification</a></li>
+        </ul>
+        <p class="hint">
+          Intervals describe variation across simulation seeds, not a human population. They are
+          pointwise intervals without multiple-comparison correction. The refactored Python
+          implementation reproduced all 1,800 summary rows exactly.
+        </p>
+      </section>
+    </main>
+    <script type="module" src="js/i18n.js"></script>
+  </body>
+</html>

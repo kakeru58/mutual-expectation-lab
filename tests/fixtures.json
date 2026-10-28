@@ -1,0 +1,103 @@
+{
+  "description": "仕様適合テスト用の強制行動列。最適方策や実験結果を意味しない。",
+  "common": {
+    "urgency_A": 1,
+    "urgency_B": 1,
+    "capability_A": 1,
+    "capability_B": 1,
+    "yield_cost_A": 2,
+    "yield_cost_B": 2,
+    "delta_A": 0,
+    "delta_B": 0,
+    "w_A": 6,
+    "w_B": 6
+  },
+  "cases": [
+    {
+      "id": "yield_A_both_expect",
+      "g_A": 1,
+      "g_B": 1,
+      "actions": [
+        "YIELD",
+        "PASS",
+        "PASS"
+      ],
+      "expected": {
+        "arrival_A": 3,
+        "arrival_B": 2,
+        "task_cost_A": 5,
+        "task_cost_B": 2,
+        "expectation_cost_A": 6,
+        "expectation_cost_B": 0,
+        "total_cost_A": 11,
+        "total_cost_B": 2,
+        "first_yielder": "A",
+        "L_A": 1,
+        "L_B": 0
+      }
+    },
+    {
+      "id": "yield_A_no_expect",
+      "g_A": 0,
+      "g_B": 0,
+      "actions": [
+        "YIELD",
+        "PASS",
+        "PASS"
+      ],
+      "expected": {
+        "arrival_A": 3,
+        "arrival_B": 2,
+        "task_cost_A": 5,
+        "task_cost_B": 2,
+        "expectation_cost_A": 0,
+        "expectation_cost_B": 0,
+        "total_cost_A": 5,
+        "total_cost_B": 2,
+        "first_yielder": "A"
+      }
+    },
+    {
+      "id": "timeout_both_expect",
+      "g_A": 1,
+      "g_B": 1,
+      "actions": [
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT",
+        "WAIT"
+      ],
+      "expected": {
+        "arrived_A": false,
+        "arrived_B": false,
+        "capped_arrival_A": 20,
+        "capped_arrival_B": 20,
+        "task_cost_A": 120,
+        "task_cost_B": 120,
+        "expectation_cost_A": 6,
+        "expectation_cost_B": 6,
+        "total_cost_A": 126,
+        "total_cost_B": 126,
+        "first_yielder": null,
+        "L_A": 1,
+        "L_B": 1
+      }
+    }
+  ]
+}

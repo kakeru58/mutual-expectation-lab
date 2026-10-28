@@ -1,0 +1,22 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "mutual-expectation-lab"
+version = "0.1.0"
+description = "Readable dyadic expectation experiments and a zero-experience browser demo"
+requires-python = ">=3.11"
+dependencies = []
+
+[project.scripts]
+expectation-lab = "expectation_lab.__main__:main"
+
+[tool.setuptools.packages.find]
+include = ["expectation_lab*"]
+
+[tool.setuptools.package-data]
+expectation_lab = ["config.json"]
+
+[tool.black]
+line-length = 88

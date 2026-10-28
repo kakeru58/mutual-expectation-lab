@@ -1,0 +1,149 @@
+<!doctype html>
+<html lang="en" translate="no">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="google" content="notranslate" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Model | Mutual Expectation Lab</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <header>
+      <a class="brand" href="index.html">Mutual Expectation Lab</a>
+      <nav>
+        <a href="index.html">Experiment</a><a href="results.html">Results</a
+        ><a class="active" href="model.html">Model</a>
+        <button
+          id="languageToggle"
+          class="language-toggle"
+          type="button"
+          aria-label="Switch to Japanese"
+        >
+          日本語
+        </button>
+      </nav>
+    </header>
+    <main class="article">
+      <h1>Model</h1>
+      <section class="panel">
+        <h2>Environment</h2>
+        <p>
+          A and B act in alternating turns, starting with A. Both want to cross a single-width
+          corridor. One agent must enter a bay before the other can pass. An episode ends when both
+          arrive or after 20 turns.
+        </p>
+        <table>
+          <tr>
+            <th>Action</th>
+            <th>Effect</th>
+          </tr>
+          <tr>
+            <td>WAIT</td>
+            <td>Keep the current position.</td>
+          </tr>
+          <tr>
+            <td>YIELD</td>
+            <td>Enter the bay if able to yield.</td>
+          </tr>
+          <tr>
+            <td>PASS</td>
+            <td>Arrive when the partner is in a bay or has already arrived.</td>
+          </tr>
+          <tr>
+            <td>REQUEST</td>
+            <td>Ask the partner to let this agent pass first.</td>
+          </tr>
+          <tr>
+            <td>CANCEL</td>
+            <td>Withdraw a pending request.</td>
+          </tr>
+        </table>
+        <p>
+          A request does not force a response. A cancellation changes the request flag, not the
+          internal demand criterion.
+        </p>
+      </section>
+      <section class="panel">
+        <h2>Learning</h2>
+        <p>
+          Each agent maintains its own counts of the partner's actions for each exact public
+          context. The context includes positions, urgency, yielding ability, turn, time, request
+          flags and whether priority has been settled.
+        </p>
+        <pre>
+q(action | context) = (observed count + 1)
+                      / (sum of legal action counts + number of legal actions)</pre
+        >
+        <p>
+          At initialization, both tables are empty. Predictions are uniform over legal actions.
+          During training, each agent explores with probability 0.1 and updates its table after
+          observing the partner. Evaluation uses no exploration and makes no updates. Automatic WAIT
+          actions by arrived agents are excluded from learning.
+        </p>
+        <p>
+          One epoch contains all 12 scenarios once. The same partner is retained throughout
+          training.
+        </p>
+      </section>
+      <section class="panel">
+        <h2>Agent parameters</h2>
+        <table>
+          <tr>
+            <th>Parameter</th>
+            <th>Meaning</th>
+          </tr>
+          <tr>
+            <td>k</td>
+            <td>Cost of yielding.</td>
+          </tr>
+          <tr>
+            <td>delta</td>
+            <td>Urgency-difference threshold for demanding that the partner yield.</td>
+          </tr>
+          <tr>
+            <td>w</td>
+            <td>Weight assigned to an unfulfilled demand.</td>
+          </tr>
+        </table>
+        <p>
+          If the partner cannot yield, demand is zero. If only the partner can yield, demand is one.
+          If both can yield, demand is one when own urgency minus partner urgency is at least delta.
+          These parameters do not change through learning.
+        </p>
+      </section>
+      <section class="panel">
+        <h2>Conditions and planning</h2>
+        <pre>
+Expected cost = expected task cost
+              + g * w * expected unfulfilled demand</pre
+        >
+        <p>
+          Prediction only: both g values are zero. Expectation A only: only A has g = 1. Expectation
+          A and B: both have g = 1. All conditions use the same environment, observations, learning
+          rule and full remaining-horizon planner.
+        </p>
+        <p>
+          Task costs include time, yielding effort, communication effort and a timeout penalty. At
+          the first YIELD, the yielding agent incurs an unfulfilled-demand loss if its demand was
+          active. The partner's loss is zero. An unresolved timeout is evaluated once. The planner
+          receives only its own private parameters and prediction table.
+        </p>
+      </section>
+      <section class="panel">
+        <h2>Implementation</h2>
+        <p>
+          The browser runs the model in a Web Worker. It uses the same SHA256 keys, MT19937 seeding
+          and action ordering as the Python implementation. Reset creates two new empty prediction
+          tables. Archived results are shown on a separate page and are not loaded into the live
+          model.
+        </p>
+        <p>
+          Message text is a fixed rendering of REQUEST and CANCEL, not generated dialogue. The model
+          represents an explicit evaluation of the response sought from another agent. It does not
+          establish psychological validity or irreducibility to preferences.
+        </p>
+      </section>
+    </main>
+    <script type="module" src="js/i18n.js"></script>
+  </body>
+</html>

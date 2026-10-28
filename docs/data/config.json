@@ -1,0 +1,206 @@
+{
+  "schema_version": "1.0",
+  "date": "2026-10-28",
+  "task": "dyadic_yielding",
+  "horizon": 20,
+  "first_actor": "A",
+  "urgencies": [
+    1,
+    3
+  ],
+  "capability_patterns": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      0
+    ],
+    [
+      0,
+      1
+    ]
+  ],
+  "communication_effort": 0.2,
+  "timeout_penalty": 100,
+  "prior_count": 1,
+  "epsilon_train": 0.1,
+  "epsilon_eval": 0,
+  "tie_tolerance": 1e-9,
+  "tie_order": [
+    "PASS",
+    "YIELD",
+    "WAIT",
+    "REQUEST",
+    "CANCEL"
+  ],
+  "conditions": [
+    {
+      "id": "P_P",
+      "g_A": 0,
+      "g_B": 0
+    },
+    {
+      "id": "E_P",
+      "g_A": 1,
+      "g_B": 0
+    },
+    {
+      "id": "E_E",
+      "g_A": 1,
+      "g_B": 1
+    }
+  ],
+  "pairs": [
+    {
+      "id": 1,
+      "A": {
+        "yield_cost": 2,
+        "delta": 2,
+        "expectation_weight": 2
+      },
+      "B": {
+        "yield_cost": 2,
+        "delta": 2,
+        "expectation_weight": 2
+      }
+    },
+    {
+      "id": 2,
+      "A": {
+        "yield_cost": 2,
+        "delta": 0,
+        "expectation_weight": 6
+      },
+      "B": {
+        "yield_cost": 2,
+        "delta": 2,
+        "expectation_weight": 2
+      }
+    },
+    {
+      "id": 3,
+      "A": {
+        "yield_cost": 2,
+        "delta": 0,
+        "expectation_weight": 6
+      },
+      "B": {
+        "yield_cost": 2,
+        "delta": 0,
+        "expectation_weight": 6
+      }
+    },
+    {
+      "id": 4,
+      "A": {
+        "yield_cost": 6,
+        "delta": 0,
+        "expectation_weight": 6
+      },
+      "B": {
+        "yield_cost": 1,
+        "delta": 0,
+        "expectation_weight": 6
+      }
+    },
+    {
+      "id": 5,
+      "A": {
+        "yield_cost": 2,
+        "delta": -2,
+        "expectation_weight": 8
+      },
+      "B": {
+        "yield_cost": 2,
+        "delta": 2,
+        "expectation_weight": 2
+      }
+    }
+  ],
+  "main": {
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18,
+      19
+    ],
+    "train_balanced_blocks": 50,
+    "contexts_per_block": 12,
+    "eval_repeats_per_context": 1,
+    "freeze_predictor_on_eval": true,
+    "total_runs": 300,
+    "total_episodes": 183600,
+    "total_eval_episodes": 3600
+  },
+  "smoke": {
+    "pair_ids": [
+      1
+    ],
+    "seeds": [
+      0
+    ],
+    "train_balanced_blocks": 2,
+    "eval_repeats_per_context": 1,
+    "total_episodes": 108
+  },
+  "diagnostic": {
+    "shared_predictor_source": "P_P",
+    "initial_state_probes": true,
+    "ability_change": {
+      "t": 1,
+      "u_A": 3,
+      "u_B": 1,
+      "c_A": 1,
+      "c_B_before": 1,
+      "c_B_after": 0,
+      "r_A": 1,
+      "r_B": 0,
+      "first_yielder": null
+    }
+  },
+  "statistics": {
+    "primary": [
+      "joint_success",
+      "joint_task_cost"
+    ],
+    "contrasts": [
+      [
+        "E_P",
+        "P_P"
+      ],
+      [
+        "E_E",
+        "E_P"
+      ]
+    ],
+    "bootstrap_replicates": 10000,
+    "bootstrap_seed": 20261028
+  },
+  "sensitivity": {
+    "enabled_by_default": false,
+    "weight_multipliers": [
+      0,
+      0.5,
+      1,
+      2
+    ]
+  }
+}
